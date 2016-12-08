@@ -8,6 +8,7 @@ public class Main {
         ProblemeDevant pr = new ProblemeDevant();
         ValueIteration valIter = new ValueIteration(pr);
         //valIter.faireUneIteration();
+        //valIter.qval.toStrings();
         valIter.fairePlusieursIterations(100);
         valIter.qval.toStrings();
         //valIter.faireUneIteration();

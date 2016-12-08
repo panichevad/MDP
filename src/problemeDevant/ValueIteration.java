@@ -20,22 +20,31 @@ public class ValueIteration {
 
     public QValeur appliquerBellman(QValeur oldValue){
         QValeur newValue = new QValeur(probleme);
-        double qValCur = 0.0;
-        for (int i = 0; i < probleme.allState().size(); i++) {
-            for (int j = 0; j < probleme.allAction().size(); j++) {
 
+        for (int i = 0; i < probleme.allState().size(); i++) {
+
+            for (int j = 0; j < probleme.allAction().size(); j++) {
+                double qValCur = 0.0;
                 StateXYO etatDep = probleme.allState().get(i);
                 ActionOriente actionCur = probleme.allAction().get(j);
                 Distribution<StateXYO> dist = probleme.transition(etatDep, actionCur);
+                //System.out.println("action " + actionCur);
+                //System.out.println("dist" + dist.elements.toString());
 
                 for (int k = 0; k < dist.probas.size(); k++) {
                     StateXYO etatArr = dist.elements.get(k);
+                    //System.out.println("Eata Depart "+ etatDep);
+                    //System.out.println("Eata Arrivee "+ etatArr);
 
                     double probaTr = dist.probas.get(k);
+                   // System.out.println("proba tr "+ probaTr);
                     double recompense = probleme.recompense(etatDep, actionCur, etatArr);
+                    //System.out.println("recom" + recompense);
                     double qValPrec = oldValue.getValMax(etatArr);
+                    //System.out.println("qvalprec " + qValPrec);
 
                     qValCur += probaTr*(recompense + gamma*qValPrec);
+                    //System.out.println("qvalCur " + qValCur);
                 }
 
                 newValue.setVal(etatDep, actionCur, qValCur);

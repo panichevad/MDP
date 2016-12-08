@@ -59,6 +59,8 @@ public class QValeur {
      */
     public ActionOriente getActionMax(StateXYO etat){
         double valeurMax = -100000;
+
+
         ActionOriente meilleureAction = null;
         Map<ActionOriente, Double> qValeurAction;
         qValeurAction = this.qValeur.get(etat);
@@ -81,7 +83,7 @@ public class QValeur {
      * @return
      */
     public double getValMax(StateXYO etat){
-        double valeurMax = 0.0;
+        double valeurMax = -100000;
         Map<ActionOriente, Double> qValeurAction;
         qValeurAction = this.qValeur.get(etat);
         for (Map.Entry<ActionOriente, Double> entry: qValeurAction.entrySet()) {
