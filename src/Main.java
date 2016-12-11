@@ -14,8 +14,10 @@ public class Main {
         valIter.fairePlusieursIterations(100);
         valIter.qval.toStrings();
         Map<StateXYO, ActionOriente> politique = valIter.qval.getPolitique();
-        StateXYO etatDepart = new StateXYO(0,3, 2);
+        /**
+         StateXYO etatDepart = new StateXYO(0,3, 2);
         StateXYO etatArrivee;
+
         ActionOriente action;
         for (int i = 0; i < 50; i++) {
                 action = politique.get(etatDepart);
@@ -27,7 +29,8 @@ public class Main {
          */
 
         QLearning qL = new QLearning(pr);
-        qL.apprendre(500000);
+        qL.apprendre(10);
+        //qL.qval.toStrings();
 
     }
 
