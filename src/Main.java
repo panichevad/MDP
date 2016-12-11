@@ -7,12 +7,14 @@ import problemeDevant.*;
 public class Main {
     public static void main(String[] args) {
         ProblemeDevant pr = new ProblemeDevant();
+
+        /**
         ValueIteration valIter = new ValueIteration(pr);
 
         valIter.fairePlusieursIterations(100);
         valIter.qval.toStrings();
         Map<StateXYO, ActionOriente> politique = valIter.qval.getPolitique();
-        StateXYO etatDepart = new StateXYO(3,0, 2);
+        StateXYO etatDepart = new StateXYO(0,3, 2);
         StateXYO etatArrivee;
         ActionOriente action;
         for (int i = 0; i < 50; i++) {
@@ -22,7 +24,10 @@ public class Main {
                 System.out.println("Politique " + action);
 
         }
+         */
 
+        QLearning qL = new QLearning(pr);
+        qL.apprendre(500000);
 
     }
 
