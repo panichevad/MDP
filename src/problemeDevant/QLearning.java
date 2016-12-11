@@ -17,8 +17,9 @@ public class QLearning {
         this.pr = probleme;
         this.qval = new QValeur(probleme);
         this.etatCur = new StateXYO(0,3,2);
-        this.t = new HashMap<StateXYO,Map<ActionOriente,Integer>>();
+        this.gamma = 0.99;
 
+        this.t = new HashMap<StateXYO,Map<ActionOriente,Integer>>();
         for (int i = 0; i < probleme.allState().size(); i++) {
             Map<ActionOriente, Integer> qValeurAction = new HashMap<ActionOriente, Integer>();
             for (int j = 0; j < probleme.allAction().size(); j++) {
@@ -26,37 +27,18 @@ public class QLearning {
             }
             this.t.put(probleme.allState().get(i), qValeurAction);
         }
-
-        this.gamma = 0.99;
     }
 
     private void updateExperience(StateXYO etatDep, ActionOriente action, StateXYO etatAr, double
             recompense){
-        //int tValue  = 0;
-        //System.out.println("t value before: " + tValue);
-
-        //if (this.t.get(etatDep) == null || this.t.get(etatDep).get(action) == null) {
-          //  tValue = 1;
-        //}
-
-        //else{
-            int tValue = this.t.get(etatDep).get(action) + 1;
-            //tValue += 1;
-       // }
-        //System.out.println("t value after:" +tValue);
-
-        //Map<ActionOriente, Integer> actionT = new HashMap<ActionOriente, Integer>();
+        int tValue = this.t.get(etatDep).get(action) + 1;
         Map<ActionOriente, Integer> actionT = this.t.get(etatDep);
         actionT.put(action, tValue);
-        //System.out.println("etat dep" + etatDep);
-        //System.out.println("action" + action);
-        //System.out.println("etat arr" + etatAr);
-
-        //this.t.put(etatDep, actionT);// mettre a jour t
         double qVal = this.qval.getVal(etatDep,action);
         double qValEval = this.qval.getValMax(etatAr);
-        qVal += (1/tValue)*(recompense + this.gamma*qValEval - qVal) ;
-        //System.out.println("qval " +qVal);
+        double alpha = (1/(double)tValue);
+        System.out.println("aplpha " + alpha);
+        qVal += alpha*(recompense + this.gamma*qValEval - qVal) ;
         this.qval.setVal(etatDep, action, qVal);
     }
 
@@ -91,9 +73,7 @@ public class QLearning {
     public void apprendre(long n) {
         for (int i = 0; i < n; i++) {
             if (this.etatCur.x == -1 && this.etatCur.y == -1) {
-                //System.out.println("etat courant " + etatCur);
                 replacerAleatoirement();
-                //System.out.println("change for: " + etatCur);
             }
             effectuerUneIteration();
             System.out.println("Sum is " + this.qval.somme());
