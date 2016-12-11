@@ -29,8 +29,8 @@ public class Main {
          */
 
         QLearning qL = new QLearning(pr);
-        qL.apprendre(10);
-        //qL.qval.toStrings();
+        qL.apprendre(1000);
+        qL.qval.toStrings();
 
     }
 

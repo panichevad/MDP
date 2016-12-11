@@ -18,33 +18,45 @@ public class QLearning {
         this.qval = new QValeur(probleme);
         this.etatCur = new StateXYO(0,3,2);
         this.t = new HashMap<StateXYO,Map<ActionOriente,Integer>>();
+
+        for (int i = 0; i < probleme.allState().size(); i++) {
+            Map<ActionOriente, Integer> qValeurAction = new HashMap<ActionOriente, Integer>();
+            for (int j = 0; j < probleme.allAction().size(); j++) {
+                qValeurAction.put(probleme.allAction().get(j), 0);
+            }
+            this.t.put(probleme.allState().get(i), qValeurAction);
+        }
+
         this.gamma = 0.99;
     }
 
     private void updateExperience(StateXYO etatDep, ActionOriente action, StateXYO etatAr, double
             recompense){
-        int tValue  = 0;
+        //int tValue  = 0;
         //System.out.println("t value before: " + tValue);
-        if (this.t.get(etatDep) == null || this.t.get(etatDep).get(action) == null) {
-            tValue = 1;
-        }
-        else{
-            tValue = this.t.get(etatDep).get(action);
-            tValue += 1;
-        }
-        System.out.println("t value after:" +tValue);
 
-        Map<ActionOriente, Integer> actionT = new HashMap<ActionOriente, Integer>();
+        //if (this.t.get(etatDep) == null || this.t.get(etatDep).get(action) == null) {
+          //  tValue = 1;
+        //}
+
+        //else{
+            int tValue = this.t.get(etatDep).get(action) + 1;
+            //tValue += 1;
+       // }
+        //System.out.println("t value after:" +tValue);
+
+        //Map<ActionOriente, Integer> actionT = new HashMap<ActionOriente, Integer>();
+        Map<ActionOriente, Integer> actionT = this.t.get(etatDep);
         actionT.put(action, tValue);
-        System.out.println("etat dep" + etatDep);
-        System.out.println("action" + action);
-        System.out.println("etat arr" + etatAr);
+        //System.out.println("etat dep" + etatDep);
+        //System.out.println("action" + action);
+        //System.out.println("etat arr" + etatAr);
 
-        this.t.put(etatDep, actionT);// mettre a jour t
+        //this.t.put(etatDep, actionT);// mettre a jour t
         double qVal = this.qval.getVal(etatDep,action);
         double qValEval = this.qval.getValMax(etatAr);
-        qVal += (1/tValue)*(recompense + this.gamma*qValEval - qVal);
-        System.out.println("qval " +qVal);
+        qVal += (1/tValue)*(recompense + this.gamma*qValEval - qVal) ;
+        //System.out.println("qval " +qVal);
         this.qval.setVal(etatDep, action, qVal);
     }
 
@@ -58,7 +70,6 @@ public class QLearning {
         else{
             int index = new Random().nextInt(3);
             actionChoisie = this.pr.allAction().get(index);
-            //System.out.println("action chosen: " + actionChoisie);
         }
         return actionChoisie;
     }
@@ -67,28 +78,25 @@ public class QLearning {
         ActionOriente action = choisirAction();
         StateXYO etatArr = this.pr.transition(this.etatCur, action).tirage();
         double recompense = this.pr.recompense(this.etatCur, action, etatArr);
+        System.out.println("recomp " + recompense);
         updateExperience(this.etatCur, action, etatArr, recompense);
         this.etatCur = etatArr;
     }
 
     private void replacerAleatoirement(){
         int index = new Random().nextInt(this.pr.allState().size());
-        //System.out.println("index: " + index);
-        //System.out.println("check " + this.pr.allState().get(96));
         this.etatCur = this.pr.allState().get(index);
-        //System.out.println("State after change: " + etatCur);
-        //this.etatCur = etatNouveau;
-
     }
 
     public void apprendre(long n) {
-        StateXYO etatTerm = new StateXYO(-1, -1, 0);
         for (int i = 0; i < n; i++) {
-            if (this.etatCur.equals(etatTerm)) {
+            if (this.etatCur.x == -1 && this.etatCur.y == -1) {
+                //System.out.println("etat courant " + etatCur);
                 replacerAleatoirement();
+                //System.out.println("change for: " + etatCur);
             }
             effectuerUneIteration();
-            //System.out.println("Sum is " + this.qval.somme());
+            System.out.println("Sum is " + this.qval.somme());
         }
     }
 

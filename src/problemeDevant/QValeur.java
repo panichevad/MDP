@@ -19,14 +19,11 @@ public class QValeur {
             Map<ActionOriente, Double> qValeurAction = new HashMap<ActionOriente, Double>();
 
             for (int j = 0; j < problem.allAction().size(); j++) {
-                //System.out.println(problem.allAction().get(j));
                 qValeurAction.put(problem.allAction().get(j), 0.0);
 
             }
             this.qValeur.put(problem.allState().get(i), qValeurAction);
-            //System.out.println(this.qValeur);
         }
-
     }
 
     /**
